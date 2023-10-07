@@ -8,13 +8,14 @@ import "./MusicNFT.sol";
 contract MusicPlayer is Ownable {
     ERC20 public fractionalizedToken;  
     MusicNFT public musicNFT;  
-   
-
+    
     mapping(uint256 => mapping(address => uint256)) public fractionalOwnership;
+    uint256 public initialFNFTs;
 
-    constructor(address _fractionalizedToken, address _musicNFT, address initialOwner) Ownable(initialOwner){
+    constructor(address _fractionalizedToken, address _musicNFT, uint256 _initialFNFTs, address initialOwner) Ownable(initialOwner){
         fractionalizedToken = ERC20(_fractionalizedToken);
         musicNFT = MusicNFT(_musicNFT);
+        initialFNFTs = _initialFNFTs;
     }
 
   
@@ -23,7 +24,7 @@ contract MusicPlayer is Ownable {
         require(musicNFT.ownerOf(tokenId) == address(this), "Music track not held by contract");
         
         uint256 totalSupply = fractionalizedToken.totalSupply();
-        uint256 currentOwnership = fractionalOwnership[tokenId][msg.sender];
+       
         
         require(totalSupply + amount > totalSupply, "Overflow error");
         require(totalSupply + amount >= amount, "Underflow error");
